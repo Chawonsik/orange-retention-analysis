@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>귤 직거래 리텐션 분석</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+  :root {
+    --text-primary: #1F1F1F;
+    --text-secondary: #666660;
+    --text-muted: #9C9A94;
+    --accent: #D85A30;
+    --accent-strong: #B84720;
+    --accent-bg: #FBEDE5;
+    --border: #E8E4DA;
+    --surface: #FFFFFF;
+    --surface-1: #F6F3EC;
+    --surface-2: #EEEAE0;
+    --page-bg: #DFDACF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--page-bg);
+    color: var(--text-primary);
+    padding: 32px 16px;
+    line-height: 1.5;
+  }
+
+  .deck {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .slide {
+    width: 1280px;
+    max-width: 100%;
+    min-height: 780px;
+    background: var(--surface);
+    padding: 48px 56px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .slide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding-bottom: 12px;
+    border-bottom: 0.5px solid var(--border);
+    margin-bottom: 32px;
+  }
+
+  .h1 {
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-top: 14px;
+  }
+
+  .subtitle-accent {
+    font-size: 18px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-top: 10px;
+  }
+
+  .meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface-1);
+    padding: 9px 20px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 20px;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .meta-pill .sep { color: var(--text-muted); }
+
+  /* Page 1 formula & cards */
+  .formula {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .formula .op { color: var(--text-muted); font-weight: 400; }
+
+  .cards-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .card {
+    background: var(--surface-1);
+    padding: 18px 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card.accent {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent);
+  }
+  .card-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .card.accent .card-label { color: var(--accent); }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .card.accent .card-title { color: var(--accent); }
+  .card-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .season-row {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+    align-items: baseline;
+    padding-top: 20px;
+    border-top: 0.5px solid var(--border);
+  }
+  .season-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+  .season-cell {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .season-year {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .season-value {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .season-unit {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .callout {
+    margin-top: auto;
+    padding: 12px 18px;
+    border-left: 3px solid var(--accent);
+    font-size: 16px;
+    color: var(--text-primary);
+    background: rgba(216, 90, 48, 0.04);
+    border-radius: 0 6px 6px 0;
+  }
+  .callout strong { font-weight: 700; }
+
+  /* Page 2 */
+  .season-tags {
+    display: flex;
+    gap: 24px;
+    padding: 10px 20px;
+    background: var(--surface-1);
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 20px;
+    align-items: center;
+    width: fit-content;
+  }
+  .season-tags .tag { display: flex; gap: 6px; align-items: center; }
+  .season-tags .tag strong { font-weight: 700; }
+  .season-tags .tag.poong strong { color: var(--accent); }
+  .season-tags .label { color: var(--text-secondary); }
+
+  .chart-wrap { margin-top: 14px; }
+  .chart-caption {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .chart-descr {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .chart-descr strong { color: var(--text-primary); font-weight: 700; }
+
+  .block-263 {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 28px;
+    padding: 22px 24px;
+    background: var(--surface-1);
+    border-radius: 12px;
+    margin-top: 18px;
+    align-items: center;
+    width: 78%;
+  }
+  .num-263 { display: flex; flex-direction: column; gap: 6px; }
+  .num-263 .num-line {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .num-263 .num {
+    font-size: 60px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .num-263 .unit { font-size: 18px; color: var(--accent); }
+  .num-263 .caption { font-size: 11px; color: var(--text-secondary); }
+
+  .seller-table {
+    width: 100%;
+    font-size: 14px;
+    border-collapse: collapse;
+  }
+  .seller-table th {
+    text-align: right;
+    padding: 4px 8px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 12px;
+  }
+  .seller-table th:first-child { text-align: left; }
+  .seller-table td {
+    padding: 6px 8px;
+    text-align: right;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .seller-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .seller-table td.hi { font-weight: 700; }
+  .seller-table tbody tr { border-top: 0.5px solid var(--border); }
+  .seller-caption {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 0.5px solid var(--border);
+    line-height: 1.5;
+  }
+
+  /* Page 3 */
+  .quote {
+    font-size: 24px;
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+    margin-top: 28px;
+    color: var(--text-primary);
+    font-weight: 400;
+    max-width: 960px;
+    word-break: keep-all;
+  }
+  .quote em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .plan-box {
+    background: var(--surface-1);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 24px;
+    margin-top: 24px;
+    max-width: 960px;
+  }
+  .plan-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .plan-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .plan-list li {
+    font-size: 14px;
+    padding-left: 16px;
+    position: relative;
+    color: var(--text-primary);
+    word-break: keep-all;
+  }
+  .plan-list li::before {
+    content: '•';
+    position: absolute;
+    left: 4px;
+    color: var(--text-muted);
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 0.5px solid var(--border);
+    max-width: 960px;
+  }
+  .two-col h3 {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .two-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .two-col li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+  .two-col li::before {
+    content: '·';
+    position: absolute;
+    left: 2px;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+  .two-col li strong { color: var(--text-primary); font-weight: 700; }
+
+  .link-footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding: 14px 18px;
+    background: var(--surface-1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 960px;
+  }
+  .link-footer .lf-label {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .link-footer .lf-sep { color: var(--text-muted); }
+  .link-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .deck { gap: 0; }
+    .slide {
+      page-break-after: always;
+      box-shadow: none;
+      min-height: 100vh;
+      width: 100%;
+      max-width: none;
+    }
+    .slide:last-child { page-break-after: auto; }
+  }
+
+  @media (max-width: 1320px) {
+    .slide { padding: 32px 32px; }
+    .h1 { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <!-- SLIDE 1 -->
+  <section class="slide">
+    <div class="slide-header">
+      <span>귤 판매 데이터 분석 · 개요</span>
+      <span>01 / 03</span>
+    </div>
+
+    <h1 class="h1">시즌마다 판매 규모가 크게 달라진다<br>진짜 고객이 이탈한 걸까?</h1>
+    <div class="subtitle">가족의 4년치 판매 장부로 이유를 찾아봤다</div>
+
+    <div class="meta-pill">
+      <span>2022–2025</span><span class="sep">·</span>
+      <span>BigQuery SQL</span><span class="sep">·</span>
+      <span>3,981건 주문</span><span class="sep">·</span>
+      <span>2,117명 고객</span><span class="sep">·</span>
+      <span>Chawonsik/orange-retention-analysis</span>
+    </div>
+
+    <div class="formula">
+      매출 <span class="op">=</span> 가격 <span class="op">×</span> 1인당 구매량 <span class="op">×</span> 고객 수
+    </div>
+
+    <div class="cards-3">
+      <div class="card">
+        <div class="card-label">제외</div>
+        <div class="card-title">가격</div>
+        <div class="card-desc">연도별 상승 · 연도 간 비교 왜곡</div>
+      </div>
+      <div class="card">
+        <div class="card-label">고정</div>
+        <div class="card-title">1인당 구매량</div>
+        <div class="card-desc">4년간 1.4–1.5박스</div>
+      </div>
+      <div class="card accent">
+        <div class="card-label">변동</div>
+        <div class="card-title">고객 수</div>
+        <div class="card-desc">이 프로젝트의 분석 대상</div>
+      </div>
+    </div>
+
+    <div class="season-row">
+      <div class="season-label">1인당 평균 박스 · 시즌별</div>
+      <div class="season-cell"><span class="season-year">2022</span><span class="season-value">1.5</span><span class="season-unit">박스</span></div>
+      <div class="season-cell"><span class="season-year">2023</span><span class="season-value">1.4</span><span class="season-unit">박스</span></div>
+      <div class="season-cell"><span class="season-year">2024</span><span class="season-value">1.5</span><span class="season-unit">박스</span></div>
+      <div class="season-cell"><span class="season-year">2025</span><span class="season-value">1.4</span><span class="season-unit">박스</span></div>
+    </div>
+
+    <div class="callout">
+      매출을 움직이는 건 <strong>고객 수 하나</strong>. 그런데 그 고객 수가 <strong>시즌마다 판매자마다</strong> 크게 달라졌다.
+    </div>
+  </section>
+
+  <!-- SLIDE 2 -->
+  <section class="slide">
+    <div class="slide-header">
+      <span>귤 판매 데이터 분석 · 발견</span>
+      <span>02 / 03</span>
+    </div>
+
+    <h1 class="h1">재구매 오르내림 원인은 해거리였다</h1>
+    <div class="subtitle">SQL로 못 찾다가 가족에게 확인해서 알아낸 원인</div>
+
+    <div class="season-tags">
+      <span class="label">전체 4개 시즌</span>
+      <div class="tag poong"><strong>2022</strong><span>풍년</span></div>
+      <div class="tag"><strong>2023</strong><span>흉년</span></div>
+      <div class="tag poong"><strong>2024</strong><span>풍년</span></div>
+      <div class="tag"><strong>2025</strong><span>흉년</span></div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-caption">2022 코호트(904명) 시즌별 리텐션 · 재방문율(%)</div>
+      <svg viewBox="0 0 900 200" style="width: 100%; height: 180px; margin-top: 6px;">
+        <defs>
+          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#D85A30" stop-opacity="0.14"/>
+            <stop offset="100%" stop-color="#D85A30" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <line x1="60" y1="30" x2="880" y2="30" stroke="#E8E4DA" stroke-width="0.5"/>
+        <line x1="60" y1="95" x2="880" y2="95" stroke="#E8E4DA" stroke-width="0.5"/>
+        <line x1="60" y1="160" x2="880" y2="160" stroke="#E8E4DA" stroke-width="0.5"/>
+        <text x="30" y="34" font-size="12" fill="#9C9A94">30%</text>
+        <text x="30" y="99" font-size="12" fill="#9C9A94">25%</text>
+        <text x="30" y="164" font-size="12" fill="#9C9A94">20%</text>
+        <path d="M 200 118 L 470 43 L 740 130 L 740 160 L 200 160 Z" fill="url(#areaGrad)"/>
+        <polyline points="200,118 470,43 740,130" fill="none" stroke="#D85A30" stroke-width="2.5"/>
+        <circle cx="200" cy="118" r="6" fill="#D85A30"/>
+        <circle cx="470" cy="43" r="6" fill="#D85A30"/>
+        <circle cx="740" cy="130" r="6" fill="#D85A30"/>
+        <text x="200" y="100" font-size="14" font-weight="700" fill="#1F1F1F" text-anchor="middle">24.1%</text>
+        <text x="470" y="25" font-size="14" font-weight="700" fill="#D85A30" text-anchor="middle">27.8%</text>
+        <text x="740" y="112" font-size="14" font-weight="700" fill="#1F1F1F" text-anchor="middle">23.1%</text>
+        <text x="200" y="182" font-size="12" fill="#666660" text-anchor="middle">2023 시즌 · 흉년</text>
+        <text x="470" y="182" font-size="12" fill="#666660" text-anchor="middle">2024 시즌 · 풍년</text>
+        <text x="740" y="182" font-size="12" fill="#666660" text-anchor="middle">2025 시즌 · 흉년</text>
+      </svg>
+    </div>
+
+    <div class="chart-descr">
+      해거리는 격년 주기로 물량이 달라지는 특성. 2022·2024 풍년, 2023·2025 흉년. 전체 고객 기준 신규/유지/복귀 분해에서도 <strong>풍년(2024) 복귀 10.9%</strong> vs <strong>흉년(2025) 8.5%</strong>로 방향 일치.
+    </div>
+
+    <div class="block-263">
+      <div class="num-263">
+        <div class="num-line">
+          <span class="num">263</span><span class="unit">명</span>
+        </div>
+        <div class="caption">3시즌 이상 구매 · 전체 2,117명 중</div>
+      </div>
+      <div>
+        <table class="seller-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>seller_A</th>
+              <th>seller_B</th>
+              <th>seller_C</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>재구매율</td>
+              <td>29.7%</td>
+              <td class="hi">36.1%</td>
+              <td>25.6%</td>
+            </tr>
+            <tr>
+              <td>주문당 평균 박스</td>
+              <td>1.11</td>
+              <td>1.11</td>
+              <td>1.13</td>
+            </tr>
+            <tr>
+              <td>3시즌 이상 충성 전환율</td>
+              <td>17.6%</td>
+              <td class="hi">26.3%</td>
+              <td>14.3%</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="seller-caption">
+          판매자별 충성 고객 수: A 126명 · B 130명 · C 7명. 차이가 뚜렷하지만 세 판매자 모두 지인 판매라 원인은 밝히지 못함.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      명단 확보는 이 프로젝트의 <strong>실질 산출물</strong>. 다음 시즌엔 이 <strong>263명</strong>에게 물량을 우선 배정하거나 <strong>사전 안내를 먼저</strong> 할 수 있다.
+    </div>
+  </section>
+
+  <!-- SLIDE 3 -->
+  <section class="slide">
+    <div class="slide-header">
+      <span>귤 판매 데이터 분석 · 회고와 방법론</span>
+      <span>03 / 03</span>
+    </div>
+
+    <h1 class="h1">이 분석에서 답 못 한 것들</h1>
+
+    <div class="quote">
+      판매자별 재구매율 차이는 명확했지만 <em>결과 차이의 원인은 밝히지 못했다</em>.<br>
+      세 판매자 모두 지인 판매라 접근 방식 자체는 다르지 않다.<br>
+      왜 이렇게 벌어졌는지 이번 데이터만으론 답을 못 냈다.
+    </div>
+
+    <div class="plan-box">
+      <div class="plan-title">다음 시즌 계획</div>
+      <ul class="plan-list">
+        <li>고객군 배경(직장, 관계, 선호 등)을 함께 기록</li>
+        <li>주문 전 사전 커뮤니케이션 여부를 기록</li>
+        <li>확보한 263명 명단으로 우선 배정 실험</li>
+      </ul>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3>한계</h3>
+        <ul>
+          <li>해거리 확정하려면 관측 시즌 전환이 <strong>2쌍</strong>뿐이라 시즌이 더 쌓여야 함</li>
+          <li>배송 주소는 배송지일 뿐 <strong>실거주지가 아닐 수 있어</strong> 지역별 분석은 참고용</li>
+          <li>전화번호가 없는 소수 고객은 <strong>이름과 지역으로 식별</strong>해 동명이인 오차 가능</li>
+        </ul>
+      </div>
+      <div>
+        <h3>방법론 요약</h3>
+        <ul>
+          <li><strong>데이터</strong>: 가족이 4년간 관리해온 판매 엑셀 → 익명화 → BigQuery</li>
+          <li><strong>정제 발견</strong>: 박스수량/운임 컬럼 실제 의미 불일치, 받는고객핸드폰번호 칸에 메모, 소계·복사 잔여물 존재</li>
+          <li><strong>정제 처리</strong>: 전화번호로 고객 식별, 발송일 forward fill(검증 후 적용), 이름·전화·주소 익명화</li>
+          <li><strong>정의·검증</strong>: 리텐션(시즌) / 재구매율(평생) 구분 · 매 쿼리 합계 대조</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="link-footer">
+      <span class="lf-label">BigQuery SQL 9개 쿼리</span>
+      <span class="lf-sep">·</span>
+      <span>GitHub</span>
+      <a href="https://github.com/Chawonsik/orange-retention-analysis">github.com/Chawonsik/orange-retention-analysis</a>
+    </div>
+  </section>
+</div>
+</body>
+</html>
