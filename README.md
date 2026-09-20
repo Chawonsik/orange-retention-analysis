@@ -2,7 +2,7 @@
 
 가족이 4년째 판매하는 귤 직거래 주문 기록(2022–2025)을 BigQuery SQL로 분석. 지인 판매·시즌 상품 사업에서 리텐션을 축으로 세그먼트 기반 CRM 액션 매트릭스까지 설계함.
 
-**역할** · 개인 프로젝트 · 문제 정의부터 CRM 설계까지
+**역할**: 개인 프로젝트, 문제 정의부터 CRM 설계까지
 
 **분석 결과 및 CRM 설계 · [슬라이드 6페이지 (PDF)](slides/deck-linear.pdf)**
 
@@ -24,7 +24,7 @@
 **정제 시 발견**
 - '박스 수량'(10kg) / '운임'(실제 5kg 박스 수) — 컬럼명·용도 불일치
 - '받는 고객 핸드폰 번호' 칸은 전화번호가 아닌 배송 메모. 실제 연락처는 '받는 고객 전화번호'
-- 소계 행 406건 · 고객 정보 없이 품명·수량만 남은 복사 잔여물 1,370건 → 제거
+- 소계 행 406건과 고객 정보 없이 품명·수량만 남은 복사 잔여물 1,370건 → 제거
 
 **정제 처리**
 - 고객 식별 키는 전화번호 사용 (이름은 구매자·부모님·회사명 혼재)
@@ -48,15 +48,15 @@
 
 가설 순서대로 4개.
 
-- [`01_retention_by_size_change.sql`](sql/01_retention_by_size_change.sql) · H1 두 번째 시즌 수량 변화와 이후 재구매율
-- [`02_customer_profile_by_seller.sql`](sql/02_customer_profile_by_seller.sql) · H2 판매자별 고객군 프로필
-- [`03_repurchase_by_seller_segment.sql`](sql/03_repurchase_by_seller_segment.sql) · H2 세그먼트 통제 후 판매자별 재구매율
-- [`04_retention_by_season_count.sql`](sql/04_retention_by_season_count.sql) · H3 누적 시즌 수별 다음 시즌 재구매율
+- [`01_retention_by_size_change.sql`](sql/01_retention_by_size_change.sql): H1 두 번째 시즌 수량 변화와 이후 재구매율
+- [`02_customer_profile_by_seller.sql`](sql/02_customer_profile_by_seller.sql): H2 판매자별 고객군 프로필
+- [`03_repurchase_by_seller_segment.sql`](sql/03_repurchase_by_seller_segment.sql): H2 세그먼트 통제 후 판매자별 재구매율
+- [`04_retention_by_season_count.sql`](sql/04_retention_by_season_count.sql): H3 누적 시즌 수별 다음 시즌 재구매율
 
 **원칙**
 - 시즌 필터는 원본 행을 미리 지우지 않고 계산 후 HAVING/WHERE로 결과를 걸러냄 (시즌 삭제 시 계산 왜곡 방지)
 - 고객마다 여러 값이 나올 수 있는 컬럼(판매자 등)은 `MAX(CASE WHEN season = first_season THEN seller END)`로 첫 구매 시점 값을 대표값으로 처리 (여러 판매자에게 산 고객 38명 확인 후 적용)
-- 매 쿼리마다 합계 검증 별도 실행 (세그먼트별 고객 합 = 코호트 전체 · 조인 뒤 행 수 = (고객, 시즌) 조합)
+- 매 쿼리마다 합계 검증 별도 실행 (세그먼트별 고객 합 = 코호트 전체, 조인 뒤 행 수 = (고객, 시즌) 조합)
 
 ## 배움
 
