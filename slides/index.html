@@ -124,6 +124,20 @@ body {
 }
 .hypothesis-tag .h-label { color: var(--primary); font-weight: 600; letter-spacing: 0.4px; }
 
+.verdict-label {
+  display: inline-block;
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(94, 106, 210, 0.15);
+  border: 1px solid rgba(94, 106, 210, 0.45);
+  border-radius: 999px;
+  padding: 5px 16px;
+  margin-right: 16px;
+  vertical-align: middle;
+  letter-spacing: -0.2px;
+}
+
 /* Page 1 questions grid */
 .questions-grid {
   display: grid;
@@ -338,8 +352,8 @@ body {
       <h1 class="display-lg">매출 확대가 목표가 아닌 CRM</h1>
       <p class="subhead">
         지인 판매·입소문·시즌 상품 사업<br>
-        해거리로 물량이 한정된 이 사업에서 통제 가능한 CRM 축은 <em class="accent">관계 지속률(리텐션)</em> 하나<br>
-        어떻게 개선할까?
+        물량은 해거리(풍·흉년 격년 반복)로 한정되지만 다 팔림. 객단가도 고정.<br>
+        한정된 물량을 <em class="accent">누구에게 먼저</em> 줄 것인가
       </p>
     </div>
 
@@ -389,7 +403,7 @@ body {
         <span class="h-label">H1</span>
         <span>재구매 시 수량이 늘면 리텐션이 높을 것이다</span>
       </div>
-      <h1 class="display-md">상식은 맞지만 · <em>이 사업에선 신호 약함</em></h1>
+      <h1 class="display-md"><span class="verdict-label">지지 약함</span><em>이 사업에선 격차 미미</em></h1>
       <p class="subhead">
         첫 시즌 1박스로 시작한 고객이 두 번째 시즌에 2박스+로 확대 시 이후 재구매율 6.3%p 높음<br>
         방향은 지지되나 격차가 작고 확대 그룹 표본(54명)도 제한적이라 강한 신호로 보기 어려움
@@ -425,13 +439,13 @@ body {
     </div>
 
     <div class="insight">
-      <strong>대상 971명</strong>(2022·2023 첫 구매 + 1박스 시작) 중 재구매 301명. 확대 그룹 표본이 54명으로 작고 격차 6.3%p는 방향성 이상의 결론을 내리기엔 약함. "수량 확대 유도"는 흔한 CRM 처방이지만 이 사업에선 얇은 카드.
+      <strong>대상 971명</strong>(2022·2023 첫 구매 + 1박스 시작) 중 재구매 301명. 확대 그룹 표본이 54명으로 작고 격차 6.3%p는 결론 내리긴 약함. "수량 확대 유도"는 흔한 CRM 액션이지만 이 사업에선 큰 차이 없음.
     </div>
 
     <div class="bridge">
       <div class="bridge-main">
         <span class="bridge-arrow">→</span>
-        <span>수량 확대는 얕은 카드 → 다음은 <strong>판매자별 격차</strong>의 실제 원인 검증</span>
+        <span>수량 확대는 효과 약함 → 다음은 <strong>판매자별 격차</strong>의 실제 원인 검증</span>
       </div>
     </div>
 
@@ -454,7 +468,7 @@ body {
         <span class="h-label">H2</span>
         <span>판매자별 재구매율 차이의 원인은 판매자 자체보다 확보한 고객군 특성일 것이다</span>
       </div>
-      <h1 class="display-md">부분 지지 · <em>판매자 우위가 세그먼트마다 뒤집힘</em></h1>
+      <h1 class="display-md"><span class="verdict-label">부분 지지</span><em>누가 앞섰는지가 세그먼트마다 뒤집힘</em></h1>
       <p class="subhead">
         원본 재구매율은 seller_B 우세. 세그먼트(첫 시즌·첫 구매 규모) 통제 후 방향은 코호트마다 달라짐.<br>
         2024 multi에선 seller_A가 22.9%p 앞섬. 판매자 요인이 없다고도 있다고도 결론 어려움.
@@ -534,7 +548,7 @@ body {
     <div class="bridge">
       <div class="bridge-main">
         <span class="bridge-arrow">→</span>
-        <span>판매자 개인 노하우 이식은 근거 얕음 → 리텐션의 <strong>진짜 축</strong>을 다른 데서 탐색</span>
+        <span>잘한 판매자 방식 옮기기는 근거 부족 → 리텐션의 <strong>진짜 축</strong>을 다른 데서 탐색</span>
       </div>
     </div>
 
@@ -557,7 +571,7 @@ body {
         <span class="h-label">H3</span>
         <span>이미 구매한 시즌 수가 많을수록 다음 시즌 재구매 확률이 높을 것이다</span>
       </div>
-      <h1 class="display-md">지지 · <em>신규 대비 최대 3.3배 격차</em></h1>
+      <h1 class="display-md"><span class="verdict-label">지지</span><em>신규 대비 최대 3.3배 격차</em></h1>
       <p class="subhead">
         누적 구매 시즌이 늘어날수록 다음 시즌 재구매율 계단식 상승.<br>
         신규 vs 3시즌 이상 구매자 <em class="accent">약 3.3배 격차</em>. CRM 자원 배분의 결정적 근거.
@@ -598,13 +612,13 @@ body {
     </div>
 
     <div class="insight">
-      <strong>3시즌 이상 구매한 263명 = 이 사업의 진짜 단골.</strong> 신규 획득이 아닌 이 층의 유지·확대가 CRM의 핵심. 신규 → 재구매 → 충성 세그먼트 전환율이 관리 지표.
+      <strong>3시즌 이상 구매한 263명 = 이 사업의 진짜 단골.</strong> 신규 획득이 아닌 이들의 유지·확대가 CRM의 핵심. 신규 → 재구매 → 충성 세그먼트 전환율이 관리 지표.
     </div>
 
     <div class="bridge">
       <div class="bridge-main">
         <span class="bridge-arrow">→</span>
-        <span>격차 뚜렷 → 다음 과제는 <strong>실행 가능한 세그먼트 액션 매트릭스</strong> 설계</span>
+        <span>격차 뚜렷 → 다음 과제는 <strong>세그먼트 액션 매트릭스</strong> 설계</span>
       </div>
       <div class="bridge-sub">
         지인 판매 시즌 상품 4년차치고 <strong>재구매 기반 탄탄한 편</strong>. 이 사업에서 흔들리는 축은 시즌 물량 하나.
@@ -626,10 +640,10 @@ body {
     </header>
 
     <div class="hero">
-      <h1 class="display-md">세그먼트 × 시즌 사이클 매트릭스</h1>
+      <h1 class="display-md">세그먼트 × 시즌 주기 매트릭스</h1>
       <p class="subhead">
-        H3 결과를 기반으로 세그먼트를 정의한 뒤 시즌 사이클 시점마다 세그먼트별 액션 매핑<br>
-        판매자 실험은 다음 시즌 자연 실험으로 병행
+        H3 결과를 기반으로 세그먼트를 정의한 뒤 시즌 주기 시점마다 세그먼트별 액션 연결<br>
+        판매자 A/B 실험은 다음 시즌 실제 판매 결과로 이어 관찰
       </p>
     </div>
 
@@ -675,7 +689,7 @@ body {
     </div>
 
     <div class="matrix-section">
-      <div class="matrix-title">시즌 사이클 액션 매트릭스</div>
+      <div class="matrix-title">시즌 주기 액션 매트릭스</div>
       <table class="data-table">
         <thead>
           <tr>
@@ -737,12 +751,12 @@ body {
     </header>
 
     <div class="hero">
-      <h1 class="display-md">이 분석에서 답 못 한 것들</h1>
+      <h1 class="display-md">분석의 한계와 다음 과제</h1>
     </div>
 
     <div class="retro-main">
       <div class="retro-headline">
-        판매자별 접근 방식 차이의 실제 원인은 이 데이터만으로 좁히지 못함
+        판매자별 접근 방식이 왜 다른지는 이 데이터만으론 밝히기 어려움
       </div>
       <div class="retro-body">
         초기엔 원본 재구매율 비교로 판매자 요인 확인 시도 → 원본이 코호트 구성으로 왜곡될 가능성 확인 → <strong>세그먼트 통제 접근으로 전환</strong>. 통제 후에도 방향 갈려 판매자 자체 원인은 확정 불가. 관측만 기록.
@@ -755,7 +769,7 @@ body {
         <ul>
           <li>고객군 배경(직장·관계·선호) 함께 기록</li>
           <li>판매자별 사전 커뮤니케이션 여부·시점 기록</li>
-          <li>세그먼트별 판매자 성과 지속 추적 (자연 실험)</li>
+          <li>세그먼트별 판매자 성과 지속 관찰</li>
           <li>확보한 <strong>263명 명단</strong>으로 우선 배정 실험</li>
         </ul>
       </div>
@@ -764,7 +778,7 @@ body {
         <ul>
           <li>전화번호 없는 소수 고객은 이름·지역으로 식별해 동명이인 오차 가능</li>
           <li>seller_C 표본(75명)이 작아 판매자 비교에서 조심스러운 해석 필요</li>
-          <li>H3 격차는 <strong>상관관계지 인과 아님</strong>. 오래 구매한 사람이 계속 구매하는 자연 패턴일 수 있음</li>
+          <li>H3 격차는 <strong>상관관계지 인과관계 아님</strong>. 오래 구매한 사람이 계속 구매하는 자연 패턴일 수 있음</li>
         </ul>
       </div>
     </div>
